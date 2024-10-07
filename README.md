@@ -14,7 +14,7 @@ The purpose of the Storage module is to help users choose among a number of simi
 In our initial use case, we had 18-20 computer data storage alternatives available for researchers. Our Help Desk created a list of questions to guide the researchers to specify their requirements. The Storage module allowed the researchers to enter requirements and interactively narrow the field of 18-20 to perhaps 2-3 alternatives.
 After the users clicks checkboxes to enter their criteria, ineligible results are greyed out. The user can click on remaining eligible results; these are highlighted and detailed characteristics of this smallest group are presented in a table to allow the researchers to make their final choice.
 
-In a later use case, we had more than 60 alternatives, so we repurposed the Summary field of the Service content type to be a category and impleted a select element on the page to quickly select Services in a particular category.
+In a later use case, we had more than 60 alternatives, so we repurposed the Summary field of the Service content type to be a category and implemented a select element on the page to quickly select Services in a particular category.
 
 Implementing this application in Drupal allows the service managers to easily edit the available services and supporting data without additional programming.
 
