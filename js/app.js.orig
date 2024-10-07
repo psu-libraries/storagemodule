@@ -1,0 +1,706 @@
+(function ($, Drupal, drupalSettings) {
+
+    function findGetParameter(parameterName) {
+        var result = "",
+            tmp = [];
+        location.search
+            .substr(1)
+            .split("&")
+            .forEach(function (item) {
+              tmp = item.split("=");
+              if (tmp[0] === parameterName) result = decodeURIComponent(tmp[1]);
+            });
+        return result;
+    }
+
+    // debounce and throttle taken from underscores.js
+    function debounce(func, wait, immediate) {
+        var timeout;
+        return function() {
+            var context = this, args = arguments;
+            var later = function() {
+                timeout = null;
+                if (!immediate) func.apply(context, args);
+            };
+            var callNow = immediate && !timeout;
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+            if (callNow) func.apply(context, args);
+        };
+    };
+
+    function throttle(func, wait, options) {
+      var context, args, result;
+      var timeout = null;
+      var previous = 0;
+      if (!options) options = {};
+      var later = function() {
+        previous = options.leading === false ? 0 : Date.now();
+        timeout = null;
+        result = func.apply(context, args);
+        if (!timeout) context = args = null;
+      };
+      return function() {
+        var now = Date.now();
+        if (!previous && options.leading === false) previous = now;
+        var remaining = wait - (now - previous);
+        context = this;
+        args = arguments;
+        if (remaining <= 0 || remaining > wait) {
+          if (timeout) {
+            clearTimeout(timeout);
+            timeout = null;
+          }
+          previous = now;
+          result = func.apply(context, args);
+          if (!timeout) context = args = null;
+        } else if (!timeout && options.trailing !== false) {
+          timeout = setTimeout(later, remaining);
+        }
+        return result;
+      };
+    };
+
+    var servicelist = [
+ //           { name: "Shared File Services", matches: [1,2,4,5,6,7] }
+        ];
+
+    let servicehelp = {}; // this is the help text for each service
+
+
+    // define the templates
+    // WHAT IS THIS MUSTACHE STUFF ??? :-)
+    // see:  http://mustache.github.io/mustache.5.html
+
+    $.Mustache.add("question-checkbox-template",
+        "{{#questions}}\
+        <li role='group' aria-labelledby='question-{{id}}'>\
+        <h4 id='question-{{id}}'>{{question}}\
+        <a class='control-indicator collapsed' data-toggle='collapse' aria-expanded='false' aria-controls='#explanation-{{id}}' href='#explanation-{{id}}''>\
+            <span class='sr-only'>Expand {{question}}</span>\
+        </a>\
+        </h4>\
+        <div class='explanation collapse' id='explanation-{{id}}'>{{{description}}}</div>\
+        {{#choices}}\
+            <div class='checkbox' facetid='{{id}}'>\
+            <label for='facet-{{id}}'>\
+            <input type='checkbox' name='facet-{{id}}' id='facet-{{id}}' {{checked}} class='facet' facetid='{{id}}'> {{text}}\
+            </label>\
+            </div>\
+        {{/choices}}\
+        </li>\
+        {{/questions}}");
+
+    $.Mustache.add("checkbox-facet-template","<input type='checkbox' id='facet-{{id}}'>");
+
+    $.Mustache.add("radio-facet-template","<input type='radio' id='facet-{{id}}'>");
+
+    $.Mustache.add("services-template",
+        "{{#services}}\
+        <div class='service-panel' id='service-{{id}}' service='{{id}}'>\
+            <label>\
+            <input type='checkbox' class='cardcheckbox' /> \
+            <div class='control-indicator'></div>\
+            <h4 class='service-title'>{{title}}</h4>\
+            <p>{{summary}}</p>\
+            </label>\
+        </div>\
+        {{/services}}"
+    );
+
+        var errors = [];
+        var facets = [];
+
+        // The list of services which could be visible in the grid.
+        // Only 3 of them are going to actually be visible.
+        var visible_classes = []; // items like ".service-23"
+        var first_visible = 0;
+
+        var jump_delay = false;
+
+        var questionlist = [
+            {
+                id: "security",
+                question: 'What is the security risk associated with your data?',
+                control_type: 'radio',
+                choices: [
+                    {id:1, text:'low risk', selected: false, turnoff: [2,3]},
+                    {id:2, text:'moderate risk', selected: false, turnoff: [1,3]},
+                    {id:3, text:'high risk', selected: false, turnoff: [1,2]}
+                ]
+            },
+
+            {
+                id: "protection",
+                question: 'What additional protection do you need for your data?',
+                control_type: "checkbox",
+                choices: [
+                    {id:6, text:"replication", selected: false, turnoff: []},
+                    {id:7, text:"backup / snapshots", selected: false, turnoff: []}
+                ]
+            }
+        ];
+
+
+
+
+    // read the data from JSON endpoints
+
+
+    axios.get("/rest/storage_settings")
+    .then(function(response) {
+        $('#pagetitle').html(response.data.title);
+        $('#pagesubtitle').html(response.data.subtitle);
+        $('#pagequestionheader').html(response.data.question_header);
+        $('#pageserviceheader').html(response.data.service_header);
+        //$('#pagechartheader').html(response.data.chart_header);
+        //$('#pageemailformheader').html(response.data.email_form_header);
+        //$('#pageemailaddress').html(response.data.email_address);
+        //$('#pageemailname').html(response.data.email_name);
+    });
+
+
+
+
+//    axios.get(drupalSettings.path.baseUrl + "/rest/facettree")
+    axios.get("/rest/facettree")
+    .then(function(response) {
+        // JSON responses are automatically parsed.
+
+        // here, see if there are selected facets in the URL
+        facetsselected = [];
+        inputparameters = findGetParameter("facets");
+        if (inputparameters.length > 0) {
+            facetsselected = inputparameters.split(",");
+        }
+
+        questionlist = [];
+
+        readfacets = response.data;
+        for (i=0;i<readfacets.length;i++) {
+
+            question = new Object();
+            question.id = readfacets[i].id;
+            question.question = readfacets[i].name;
+            question.control_type = readfacets[i].control_type;
+            question.description = readfacets[i].description;
+            question.choices = [];
+            // get all choice_ids to aid computing turnoff array
+            choice_ids = readfacets[i].choices.map(function(a) {return a.id;});
+            for (j=0;j<readfacets[i].choices.length;j++) {
+                choicein = readfacets[i].choices[j];
+                var facet = new Object();
+                facet.id = choicein.id;
+                facet.text = choicein.name;
+                facet.checked = "";
+                facet.selected = (facetsselected.indexOf(""+facet.id) > -1);
+                if (facet.selected) {facet.checked = "checked";}
+                //facet.selected = false;
+                facet.turnoff = [];
+                if (question.control_type == "radio") {
+                    // copy choice_ids, remove current id, use as turnoff
+                    var turnoff = choice_ids.slice(); // duplicate array
+                    var index = turnoff.indexOf(facet.id);
+                    turnoff.splice(index, 1);
+                    facet.turnoff = turnoff;
+                }
+
+                question.choices.push(facet);
+            }
+            //alert(JSON.stringify(question));
+            questionlist.push(question);
+        }
+
+        // render the questions
+
+        $("#questionlist").append($.Mustache.render('question-checkbox-template', {questions: questionlist} ));
+
+            $(".facet").on("change", function (thefacet) {
+                var a = find_facet($(this).attr("facetid"));
+
+                $('.jump-to-chart').hide();
+
+                a.selected = ! a.selected;
+                if (! a.selected) {
+                    $("#facet-"+a.id).prop("checked", false);
+                }
+
+                // if this question has radio buttons, turn off some radio
+                // buttons as necessary
+                if (a.selected) {
+                    for (var k=0; k<a.turnoff.length; k++) {
+                        off = a.turnoff[k];
+                        for (var i=0; i<questionlist.length; i++) {
+                            question = questionlist[i];
+                            for (var j=0; j<question.choices.length; j++) {
+                                choice = question.choices[j];
+                                //alert(choice.id+" vs "+off);
+                                if (choice.id*1 == off*1) {  // force to numbers
+                                    choice.selected = false;
+                                    $("#facet-"+choice.id).prop("checked", false);
+                                }
+                            }
+                        }
+                    };
+                }
+                // need to turn off the card checkboxes.
+                // or maybe not -- leave selected services selelcted when clicking facets
+                //$(".cardcheckbox").prop("checked",false);
+
+                evaluate_services();
+
+            });
+    })
+    .catch(function(e) {
+        errors.push(e)
+    });
+
+
+    // load the services
+
+//    axios.get(drupalSettings.path.baseUrl + "/rest/testservicelist")
+    axios.get("/rest/testservicelist")
+    .then(function(responseb) {
+        services = responseb.data;
+        //servicelist = responseb.data;
+
+        $.each(responseb.data, function (ind, val) {
+            if (val.title == "Help") {
+                servicehelp = val;
+                //alert(JSON.stringify(servicehelp));
+            } else {
+                servicelist.push(val);
+            }
+
+        });
+
+        // alert(JSON.stringify(servicelist));
+        //
+        // render the services grid
+        $("#rdmsg-services").append($.Mustache.render('services-template', {services: servicelist} ));
+        // render the comparison chart
+
+
+// instead of labels, we have field_data[field]["label"]
+
+        help_text_counter = 0;
+        chart = "<thead><tr><td></td>";
+        for (i=0;i<servicelist.length;i++) {
+            chart = chart + "<th class='service service-"+servicelist[i].id+"'>"+servicelist[i]["title"]+"</th>";
+        }
+        chart = chart + "</tr></thead>"; // end first row
+        //alert(chart);
+
+        // we need the order of the rows, get this in sortedfields
+        fieldweight = {};
+        for (field in servicelist[0].field_data) {
+
+            //alert ("field is "+field+" weight is "+servicelist[0].field_data[field].weight);
+            fieldweight[field] = servicelist[0].field_data[field].weight;
+        }
+
+        sortedfields = Object.keys(fieldweight).sort(function(a,b){return fieldweight[a]-fieldweight[b]})
+        // every other row
+        for (var i=0;i<sortedfields.length;i++) {
+            field = sortedfields[i];
+            //alert(field);
+            chart = chart + "<tr>";
+            chart = chart + "<th>"+servicelist[0].field_data[field].label;
+            help_text_counter++;
+            help =  servicehelp.field_data[field].value ? "<a class='popup' href='#help-"+help_text_counter+"'><span class='sr-only'>More information about "+servicelist[0].field_data[field].label+"</span><span class='fa fa-info-circle'></span></a><div class='help' id='help-"+help_text_counter+"'><h3>"+servicelist[0].field_data[field].label+"</h3>"+servicehelp.field_data[field].value+"</div>" : "";
+            chart = chart + help;
+            chart = chart +"</th>"; // row title
+                for (var j=0;j<servicelist.length;j++) {
+                    chart = chart + "<td class='service service-"+servicelist[j].id+"' data-label='"+servicelist[0].field_data[field].label+"'>"+servicelist[j].field_data[field].value+"</td>";
+                }
+            chart = chart + "</tr>";
+        }
+
+        $("#comparisonchart").html(chart);
+
+        //alert(chart);
+        //chart = chart+"</div>"; // end of chart
+        evaluate_services();
+
+
+    })
+    .catch(function(e) {
+        errors.push(e)
+    });
+
+
+
+
+
+
+
+    // utility function to show or hide services.
+    // services have id="service-{{id}}"
+
+    function evaluate_services(){
+        // get a list of selected facet ids
+        $(".service-panel").removeClass("mismatch");
+        selected = [];
+        questionlist.forEach(function(question) {
+            question.choices.forEach(function(choice) {
+                if (choice.selected == true) {
+                    selected.push(choice.id);
+                }
+            });
+        })
+        // now set the visibility of each service. These are in the manual checkbox list
+        visible_classes=[];
+        visible_services=[]; // list of ids for the url parameter
+        number_visible = 0;
+        comparisonlist = "";
+
+        for (i=0;i<servicelist.length;i++) {
+            service = servicelist[i];
+            var hidden = "no";
+            for (var j = 0; j < selected.length; j++) {
+                if ( service.facet_matches.indexOf(selected[j]) < 0) {
+                    $("#service-"+service.id) // card
+                        .addClass('mismatch')
+                        .find(".cardcheckbox")
+                        .prop('checked', false);
+                    $(".service-"+service.id).hide(); // table column
+                    servicelist[i]["hidden"]="yes";
+                    hidden = "yes";
+                }
+            };
+
+            // look at the card checkbox. if not checked, this service is hidden from the chart
+            if ($("#service-"+service.id).find('.cardcheckbox').prop('checked') == false) { // card
+                hidden = "yes";
+                servicelist[i]["hidden"]="yes";
+                //$("#service-"+service.id).addClass("mismatch") // card
+                $(".service-"+service.id).hide(); // table column
+            }
+
+            if (hidden == "no") {
+                $("#service-"+service.id).removeClass('mismatch'); // card
+                $(".service-"+service.id).show(); // table column
+                servicelist[i]["hidden"]="no";
+                number_visible = number_visible + 1;
+                visible_classes.push(".service-" + service.id);  // table column
+                comparisonlist = comparisonlist +
+                "<label><input type='checkbox' id='comparison-"+service.id+
+                "' service='.service-"+service.id+"' class='manualcheckbox' checked name='manualcheckbox-"+service.id+"'> "+
+                service.title+"<div class='control-indicator'></div></label>";
+            }
+
+            var service_count = $('.cardcheckbox:checked').length;
+            $('#selection-number').text(service_count);
+        };
+
+        $(".comparisonlist-wrapper").html(comparisonlist);
+
+        // first_visible = 0;
+        // $(".service").hide();
+
+        // show = visible_classes.slice(first_visible,first_visible+columns_to_show);
+        // $.each(show, (index,service) => {$(service).show(); });
+
+        // this event handler is for the list of manual checkboxes.  The effect is to
+        // show or hide services which match the Step 1 criteria in the comparison chart
+
+        $(".manualcheckbox").click( function() {
+            var service = $(this).attr("service");
+            if ($(this).prop("checked")) {
+                visible_classes.push(service);
+            } else {
+                var index = visible_classes.indexOf(service);
+                if (index > -1) {
+                    visible_classes.splice(index, 1);
+                }
+            }
+            visible_classes.sort();
+            $(".service").hide();
+            $.each(visible_classes, function (index,service)  {$(service).show(); });
+            growHeads();
+        });
+
+        $('.chart-select-all').click(function() {
+            $('.manualcheckbox').prop("checked", true);
+            visible_classes = [];
+            $(".manualcheckbox").each( function () {
+                var service = $(this).attr("service");
+                visible_classes.push(service);
+            });
+            visible_classes.sort();
+            $(".service").hide();
+            first_visible=0;
+            //show = visible_classes.slice(first_visible,first_visible+columns_to_show);
+            show = visible_classes;  // use all of them when scrolling the table.
+            $.each(show, function (index,service)  {$(service).show(); });
+        });
+
+        $('.chart-select-none').click(function() {
+            $('.manualcheckbox').prop("checked", false);
+            visible_classes = [];
+            $(".service").hide();
+        });
+
+
+
+        facetlist = selected.join(","); // list of facets which are "on"
+        $("#return").html("<a href='"+document.location.protocol+"//"+document.location.host+"/storage?facets="+facetlist+"'>Return</a>");
+    }
+
+    $(document).on("change", ".cardcheckbox",function () {
+        evaluate_services();
+        var service_count = $('.cardcheckbox:checked').length;
+        if (service_count < 1) { $('#container34').hide(); }
+    });
+
+    $(".jump_button").click(function(){
+      jump_delay = true;
+      setTimeout(function(){ jump_delay = false }, 500);
+      $('html, body').animate({
+        scrollTop: $(".comparisonchart-wrapper-wrapper").offset().top
+      }, 500);
+      growHeads();
+      $(".jump-to-chart").hide();
+    });
+
+    $( "#rdmsg-services" ).on('click', '.cardcheckbox', function() {
+        $('.jump-to-chart').show();
+        var service_count = $('.cardcheckbox:checked').length;
+        if (service_count < 1) {
+              $('#container34').hide();
+            $(".jump-to-chart").hide();
+        } else {
+            $('#container34').show();
+        }
+        listenForScrollEvent($('#comparisonchart tbody'));
+        growHeads();
+    });
+
+    $('.btn-clear-filters').click(function(){
+        $('.facet').each( function () {
+            if ($(this).prop('checked')) {
+                $(this).trigger('click');
+            }
+        });
+        $('.cardcheckbox').prop('checked', false);
+    });
+
+    $('.btn-select-all').click(function(){
+        $('.cardcheckbox').not('.mismatch .cardcheckbox').prop('checked', true);
+        evaluate_services();
+        $('.jump-to-chart').show();
+        $('#container34').show();
+        listenForScrollEvent($('#comparisonchart tbody'));
+    });
+
+    $('.btn-select-none').click(function(){
+        $('.cardcheckbox').prop('checked', false);
+        evaluate_services();
+        $('.jump-to-chart').hide();
+        $('#container34').hide();  // not sure we want this
+    });
+
+    $('.btn-compare-all-table').click(function(){
+        $('.manualcheckbox:visible').prop('checked', true);
+    });
+
+    $('.btn-clear-all-table').click(function(){
+        $('.manualcheckbox:visible').prop('checked', false);
+    });
+
+    var stickCompareBar = throttle(function(){
+        // this doesn't  need to happen if there are no services checked
+        var service_count = $('.cardcheckbox:checked').length;
+        if (service_count > 1 && (jump_delay == false)) {
+            // here, we choose the cards container since we know that'll be around when the JS runs
+            $el = $('#rdmsg-services');
+
+            // find the bottom of that el
+            var bottom = $el.offset().top + $el.outerHeight(true);
+
+            // add an offset so the compare bar will go away when the screen is scrolled to 200 pixels above the bottom of the comparison chart - this is just a rough approximation of when they might be able to see the table.
+
+            if ($(window).scrollTop() >= (bottom - 200)) {
+                $('.jump-to-chart').hide();
+            } else {
+                $('.jump-to-chart').show();
+            }
+        }
+    }, 200);
+
+
+    var attachHeads = throttle(function() {
+        $('#comparisonchart thead').css("left", 0);
+        $('#comparisonchart thead td').css("left", 0);
+        $('#comparisonchart tbody th').css("left", 0);
+
+        $('#comparisonchart thead').css("left", -$("#comparisonchart tbody").scrollLeft());
+        $('#comparisonchart thead td').css("left", $("#comparisonchart tbody").scrollLeft());
+        $('#comparisonchart tbody th').css("left", $("#comparisonchart tbody").scrollLeft());
+    }, 0);
+
+    var growHeads = debounce(function() {
+        $("#comparisonchart tbody th, #comparisonchart thead td").height(0);
+        $("#comparisonchart tbody th, #comparisonchart thead td").height(function() {
+            return $(this).nextAll(':visible').outerHeight()
+        });
+    }, 100);
+
+    $(document).on('custom-scroll', '#comparisonchart tbody', attachHeads);
+
+    function listenForScrollEvent(el){
+        el.on("scroll", function(){
+            el.trigger("custom-scroll");
+        })
+    }
+
+    $(window).resize(growHeads);
+
+    $(document).scroll(stickCompareBar);
+
+
+    // find the facet with the given id
+    function find_facet(facetid) {
+        for (i=0;i<questionlist.length;i++) {
+            question = questionlist[i];
+            for (j=0;j<question.choices.length;j++) {
+                facet = question.choices[j];
+                if (facet.id == facetid) {
+                    return facet;
+                }
+            }
+        }
+        return null;
+    }
+
+/* jQuery Validate Emails with Regex */
+function validateEmail(Email) {
+    var pattern = /^([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
+
+    return $.trim(Email).match(pattern) ? true : false;
+}
+
+    $("#send_email").click(function () {
+        name = $("#name").val();
+        email = $("#emailaddr").val();
+
+        if (name == "") {
+            alert("You must provide your name to send email.");
+            return;
+        }
+
+        if (!validateEmail(email)) {
+            alert("You must provide a valid email address");
+            return;
+        }
+
+        body = "Thank you for using the Cornell Service Finder tool. " +
+            "We hope it was useful.\r\n\r\n" +
+            "Your selected criteria were:\r\n";
+
+        questionlist.forEach(function(question) {
+            question.choices.forEach(function(choice) {
+                if (choice.selected == true) {
+                    body = body + "* " + question.question + " -- " + choice.text + "\r\n";
+                }
+            });
+        })
+
+        body = body + "\r\nYour resulting choices were:\r\n";
+
+        for (i=0;i<servicelist.length;i++) {
+            if (servicelist[i]["hidden"] == "no") {
+                body = body + "* " + servicelist[i].title+ "\r\n";
+            }
+        }
+
+        body = body + "\r\nUse this link to return to the tool with your criteria already selected: ";
+        body = body + document.location.protocol+"//"+document.location.host+"/storage?facets="+facetlist
+        body = body + "\r\n\r\n";
+        body = body + "If you have any further questions or need more information about " + 
+            "services at Cornell, please contact  " +
+            "user@example.com to set up a consultation, or contact the service owners " +
+            "directly (contact details in tool comparison table).\r\n\r\n" +
+            "Visit also the group website at http://cornell.edu for more information.";
+
+        subject = "Assistance request from Storage Advisor application";
+
+        $("#name").val(""); // clear the input fields
+        $("#emailaddr").val("");
+        /*
+        alert(JSON.stringify({
+            name: name,
+            email: email,
+            body: encodeURIComponent(body),
+            subject: encodeURIComponent(subject)
+        }));
+        */
+
+        emailaddresses = [];
+        if ($("#emailtoself").prop("checked")) {
+            emailaddresses.push(email);
+        }
+        if ($("#emailtordmsg").prop("checked")) {
+            emailaddresses.push("user@example.com"); 
+        }
+        if (emailaddresses.length > 0) {
+            var csrf_token;
+            axios.get('/rest/session/token')
+                     .then(function (response){
+                       csrf_token = response.data;
+
+                     })
+                     .catch(function (error){
+                       console.log(error);
+                     });
+    // removed encodeURIComponent
+            axios.post('/rest/sendemail', {
+                name: name,
+                email: emailaddresses.join(","),
+                body: body,
+                subject: subject
+            },
+            {
+               headers: {'X-CSRF-Token': csrf_token}
+            }
+            )
+              .then(function (response) {
+                  //alert(JSON.stringify(response));
+                  alert("Email sent.");
+                console.log(response);
+              })
+              .catch(function (error) {
+                  alert(JSON.stringify(error));
+                console.log(error);
+              });
+        }
+    })
+
+
+// the question highlighting only works if the control key is pressed :-)
+
+    $(document).on("mouseover", ".service-panel",
+    function(event) {
+        if (event.ctrlKey) {
+            serviceid = $(this).attr("service");
+            //alert("enter "+serviceid);
+            for (i=0; i<servicelist.length; i++) {
+                if (servicelist[i].id == serviceid) {
+                    var facetlist = servicelist[i].facet_matches; //arr of strings
+                    $('.checkbox').each( function () {
+                        if ($.inArray($(this).attr("facetid"), facetlist) < 0) {
+                            $(this).addClass('blocker');
+                        }
+                    });
+                }
+            }
+        }
+    });
+
+    $(document).on("mouseleave", ".service-panel",
+    function (event) {
+        //alert("leave");
+        $('.checkbox').removeClass('blocker');
+    });
+
+})(jQuery, Drupal, drupalSettings);
