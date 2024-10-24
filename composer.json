@@ -1,0 +1,37 @@
+{
+    "name": "cornellcustomdev/storagemodule",
+    "description": "Finder is a Drupal 9+ module to help users find services which meet their criteria",
+    "type": "drupal-module",
+    "homepage": "https://it.cornell.edu/custom-web",
+    "authors": [
+        {
+            "name": "Rich Marisa (richmarisa)",
+            "email": "rjm2@cornell.edu",
+            "homepage": "https://wildgoosechase.net",
+            "role": "Author"
+        },
+        {
+            "name": "Nazrin Tingstrom",
+            "email": "nazrin.tingstrom@cornell.edu",
+            "role": "Co-maintainer"
+        },
+        {
+            "name": "Kevin McGuire",
+            "email": "kpm75@cornell.edu",
+            "role": "Designer"
+        },
+        {
+            "name": "Anthony Adinolfi",
+            "email": "ama39@cornell.edu",
+            "role": "Designer"
+        }
+    ],
+    "support": {
+    },
+    "license": "GPL-2.0-or-later",
+    "minimum-stability": "dev",
+    "require": {
+        "drupal/paragraphs": "^1.16",
+        "drupal/smtp": "^1.4"
+    }
+}
