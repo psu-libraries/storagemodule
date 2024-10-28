@@ -31,7 +31,7 @@ From the Extend administrative page (/admin/modules), install the Storage module
 
 ## Setup of the Storage Module
 
-* In the Control Type taxonomy (/admin/structure/taxonomy/manage/control_type/overview)  add two terms: "checkbox" and "radio.".
+* In the Control Type taxonomy (/admin/structure/taxonomy/manage/control_type/overview)  add two terms: "checkbox" and "radio".
 * In the Facets taxonomy create a two-level hierarchy of terms representing criteria/questions and choices. For each of the criteria (top level facets), specify a control type: either “checkbox” (used when any, all or none of the choices may be selected) or “radio” (used when only one of the choices may be selected).
 * Drag the Facet taxonomy terms into a two level hierarchy, representing the relationship between criteria/questions and choices.
 
