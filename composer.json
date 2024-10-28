@@ -1,13 +1,12 @@
 {
     "name": "cornellcustomdev/storagemodule",
-    "description": "Finder is a Drupal 9+ module to help users find services which meet their criteria",
+    "description": "A Drupal 9+ module to help users find services which meet their criteria",
     "type": "drupal-module",
     "homepage": "https://it.cornell.edu/custom-web",
     "authors": [
         {
             "name": "Rich Marisa (richmarisa)",
             "email": "rjm2@cornell.edu",
-            "homepage": "https://wildgoosechase.net",
             "role": "Author"
         },
         {
