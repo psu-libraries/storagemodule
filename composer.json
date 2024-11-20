@@ -1,5 +1,5 @@
 {
-    "name": "cornellcustomdev/storagemodule",
+    "name": "psu-libraries/storagemodule",
     "description": "A Drupal 9+ module to help users find services which meet their criteria",
     "type": "drupal-module",
     "homepage": "https://it.cornell.edu/custom-web",
