@@ -1,0 +1,5 @@
+storage.settings:
+  title: 'Storage'
+  parent: system.admin_config_content
+  description: 'Manage Storage Settings.'
+  route_name: storage.settings
