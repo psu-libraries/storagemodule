@@ -15,7 +15,7 @@
     border-color: #955f06;
     color: white;
   }
-  
+
   .btn-secondary {
     background-color: white;
     border-radius: 2px;
@@ -33,12 +33,12 @@
     border-color: #207d93;
     color: white;
   }
-  
+
   footer a {
     color: #955f06;
     text-decoration: underline;
   }
-  
+
   #bs-example-navbar-collapse-1 ul li a {
     color: #171717;
   }
@@ -48,25 +48,25 @@
   #bs-example-navbar-collapse-1 ul li.active a {
     color: #666666;
   }
-  
+
   .hero .about h1, .interior-content h2.title, .interior-content h2 {
     color: #1b687a;
   }
-  
+
   #bs-example-navbar-collapse-1 ul li.active a {
     color: #666;
   }
-  
+
   .interior-content a {
     text-decoration: underline;
     color: #955f06;
   }
-  
+
   .skip-link.visually-hidden.focusable {
     background-color: #207d93;
     color: white;
   }
-  
+
   .skip-link.visually-hidden.focusable:focus {
     position: absolute !important;
     padding: 1em;
@@ -75,7 +75,7 @@
     z-index: 1;
     display: inline-block;
   }
-  
+
   @media (min-width: 768px) {
     .interior-content {
       width: 100%;
@@ -91,43 +91,43 @@
       padding: 0;
     }
   }
-  
+
   .interior-content p, .interior-content ul, .interior-content ol, #comparisonchart th, #comparisonchart td, .cwd-scrolling-table {
     font-family: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 14px;
   }
-  
+
   #comparisonchart th, #comparisonchart td {
     padding: 12px;
   }
-  
+
   #comparisonchart thead th, #comparisonchart thead td, .floating-col-header > div {
     white-space: nowrap;
     background-color: #5A8128;
   }
-  
+
   .cwd-scrolling-table .floating-row-header {
     background-color: whitesmoke;
   }
-  
+
   .hero, .hero:hover {
     background-image: url("../images/bg-hero-home-t.jpg") !important;
   }
-  
+
   .hero .about {
     padding: 0 12px;
   }
-  
+
   .questions-header {
     padding: 10px 0 22px;
     margin-bottom: 20px;
     border-bottom: 2px dashed #dedede;
   }
-  
+
   .services-header {
     padding-bottom: 15px;
   }
-  
+
   .interior-content h3, .interior-content .h3 {
     font-family: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif;
     color: #555;
@@ -136,7 +136,7 @@
     line-height: 1.4;
     margin: 0;
   }
-  
+
   .services-header h3 {
     position: relative;
     text-indent: 30px;
@@ -148,7 +148,7 @@
       text-indent: 0;
     }
   }
-  
+
   .services-header h3 .fa {
     position: absolute;
     top: -2px;
@@ -163,38 +163,38 @@
       display: none;
     }
   }
-  
+
   @media (max-width: 768px) {
     .btn-secondary {
       padding: 7px 24px;
     }
   }
-  
+
   .services-header .btn-secondary {
     margin: 4px 0;
   }
-  
+
   .step-1 + button {
     margin-top: 1.75em;
   }
-  
+
   .title {
     margin: 1.5em 0 0.35em;
   }
-  
+
   .title + .lead {
     color: #757575;
     font-family: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 21px;
     margin-bottom: 1em;
   }
-  
+
   .cert {
     position: relative;
     text-indent: 24px;
     color: #5A8128;
   }
-  
+
   .cert .fa {
     position: absolute;
     top: -1px;
@@ -204,31 +204,31 @@
     opacity: 0.68;
     text-indent: 0;
   }
-  
+
   .app-title {
     margin-bottom: 2em;
   }
-  
+
   h2.sub-heading {
     font-size: 24px;
     margin: 1em 0 1em;
   }
-  
+
   h2.sub-heading.heading-services {
     margin-bottom: 0.5em;
   }
-  
+
   .section-break {
     border-color: #00b7ac;
     opacity: 0.2;
     border-top-width: 3px;
     margin-top: 30px;
   }
-  
+
   .section-break.dashed {
     border-style: dashed;
   }
-  
+
   .email-options {
     margin-bottom: 0.75em;
     font-family: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -238,7 +238,7 @@
     border-bottom: none;
     margin-bottom: 10px;
   }
-  
+
   #questionlist {
     font-size: 1em;
     padding-left: 2em;
@@ -310,11 +310,11 @@
   #questionlist .explanation .panel-heading, #questionlist .explanation .panel-primary {
     border-color: #5f4a65;
   }
-  
+
   .mismatch {
     opacity: 0.35;
   }
-  
+
   #rdmsg-services {
     display: flex;
     flex-wrap: wrap;
@@ -422,7 +422,7 @@
     font-size: 12px;
     padding-right: 1.8em;
   }
-  
+
   .comparisonlist-wrapper {
     display: -webkit-box;
     display: -ms-flexbox;
@@ -464,7 +464,7 @@
     box-shadow: 0px 0px 0px 4px #9dccfd;
     border-radius: 0.5em;
   }
-  
+
   .jump-to-chart {
     position: fixed;
     bottom: 0;
@@ -481,11 +481,11 @@
   .jump-to-chart p span {
     font-size: 120%;
   }
-  
+
   .btn-compare-results {
     white-space: nowrap;
   }
-  
+
   .pager {
     position: -webkit-sticky;
     position: sticky;
@@ -501,7 +501,7 @@
   .pager .next button {
     float: right;
   }
-  
+
   .popup .fa.fa-info-circle {
     font-family: "FontAwesome";
     text-decoration: none;
@@ -518,7 +518,7 @@
   .popup .fa.fa-info-circle:active::before {
     color: #5a5a5a;
   }
-  
+
   .cd-row {
     display: flex;
   }
@@ -527,12 +527,12 @@
       display: block;
     }
   }
-  
+
   .cd-row:first-of-type .cd-cell {
     vertical-align: bottom;
     padding-bottom: 15px;
   }
-  
+
   #app .cd-row:last-of-type .cd-cell:first-child {
     background: radial-gradient(ellipse at right center, rgba(180, 225, 212, 0.1) 0%, rgba(255, 255, 255, 0) 70%);
   }
@@ -541,14 +541,14 @@
       background: none;
     }
   }
-  
+
   @media screen and (max-width: 768px) {
     .cd-cell {
       display: block;
       width: 100%;
     }
   }
-  
+
   .cd-cell:last-child {
     padding-left: 3%;
   }
@@ -557,7 +557,7 @@
       padding-left: 0;
     }
   }
-  
+
   .cd-questions {
     position: relative;
     width: 30%;
@@ -568,7 +568,7 @@
       width: 100%;
     }
   }
-  
+
   .cd-services {
     width: 70%;
   }
@@ -577,7 +577,7 @@
       width: 100%;
     }
   }
-  
+
   .cd-overflow {
     overflow-y: scroll;
     position: absolute;
@@ -595,7 +595,7 @@
       padding-right: 0;
     }
   }
-  
+
   .services-header {
     display: flex;
     align-items: center;
@@ -627,9 +627,8 @@
       align-items: flex-start;
     }
   }
-  
+
   .form-control {
     border-color: #757575;
   }
   /*# sourceMappingURL=customizations.css.map */
-  

@@ -2,7 +2,7 @@ storage.content:
   path: '/storage'
   defaults:
     _controller: '\Drupal\storage\Controller\StorageController::content'
-    _title: 'Scorecard'
+    _title_callback: '\Drupal\storage\Controller\StorageController::getTitle'
   requirements:
     _permission: 'access content'
 storage.facettree:
@@ -40,7 +40,7 @@ storage.settings:
 #  path: '/admin/structure/storage/settings'
   path: '/admin/config/content/storage'
   defaults:
-    _form: '\Drupal\storage\Form\storageSettingsForm'
+    _form: '\Drupal\storage\Form\StorageSettingsForm'
     _title: 'Data Storage Configuration'
   requirements:
     _permission: 'administer site configuration'

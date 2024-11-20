@@ -1,4 +1,6 @@
-<?PHP
+<?php
+
+declare(strict_types=1);
 
 // see
 // https://www.drupal.org/docs/8/api/configuration-api/working-with-configuration-forms
@@ -12,15 +14,15 @@ use Drupal\Core\Form\FormStateInterface;
 /**
  * Configure example settings for this site.
  */
-class storageSettingsForm extends ConfigFormBase {
-  /** 
+class StorageSettingsForm extends ConfigFormBase {
+  /**
    * {@inheritdoc}
    */
   public function getFormId() {
     return 'storage_admin_settings';
   }
 
-  /** 
+  /**
    * {@inheritdoc}
    */
   protected function getEditableConfigNames() {
@@ -29,7 +31,7 @@ class storageSettingsForm extends ConfigFormBase {
     ];
   }
 
-  /** 
+  /**
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
@@ -39,19 +41,19 @@ class storageSettingsForm extends ConfigFormBase {
       '#type' => 'textfield',
       '#title' => $this->t('Title'),
       '#default_value' => $config->get('title'),
-    );  
+    );
 
     $form['subtitle'] = array(
       '#type' => 'textarea',
       '#title' => $this->t('Subtitle'),
       '#default_value' => $config->get('subtitle'),
-    ); 
+    );
 
     $form['question_header'] = array(
       '#type' => 'textarea',
       '#title' => $this->t('Question Header'),
       '#default_value' => $config->get('question_header'),
-    );  
+    );
 
     $form['service_header'] = array(
       '#type' => 'textarea',
@@ -86,7 +88,7 @@ class storageSettingsForm extends ConfigFormBase {
     return parent::buildForm($form, $form_state);
   }
 
-  /** 
+  /**
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
