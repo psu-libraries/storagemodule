@@ -1,9 +1,9 @@
-<?PHP
+<?php
 
-
-
-function storage_theme($existing, $type, $theme, $path) {
-
+/**
+ * Implements hook_theme().
+ */
+function storage_theme($existing, $type, $theme, $path): array {
   return [
     'storage' => [
       'variables' => [],
