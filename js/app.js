@@ -294,7 +294,8 @@
             chart = chart + help;
             chart = chart +"</th>"; // row title
                 for (var j=0;j<servicelist.length;j++) {
-                    chart = chart + "<td class='service service-"+servicelist[j].id+"' data-label='"+servicelist[0].field_data[field].label+"'>"+servicelist[j].field_data[field].value+"</td>";
+                    value = (servicelist[j].field_data[field].value === undefined) ? '' : servicelist[j].field_data[field].value;
+                    chart = chart + "<td class='service service-"+servicelist[j].id+"' data-label='"+servicelist[0].field_data[field].label+"'>"+value+"</td>";
                 }
             chart = chart + "</tr>";
         }
