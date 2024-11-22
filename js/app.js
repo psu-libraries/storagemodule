@@ -67,7 +67,7 @@
             <span class='sr-only'>Expand {{question}}</span>\
         </a>\
         </div>\
-        <div class='explanation collapse' id='explanation-{{id}}'><div style=\"width: 200px;\">{{{description}}}</div></div>\
+        <div class='explanation collapse' id='explanation-{{id}}'><div>{{{description}}}</div></div>\
         <fieldset aria-labelledby='question-{{id}}'>\
         {{#choices}}\
             <div class='checkbox' facetid='{{id}}'>\
