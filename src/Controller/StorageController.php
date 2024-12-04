@@ -195,6 +195,11 @@ class StorageController extends ControllerBase {
       ->getStorage('entity_view_display')
       ->load("paragraph.service_paragraphs.default");
 
+    $renderer = \Drupal::service('renderer');
+
+    /** @var \Drupal\paragraphs\ParagraphViewBuilder $paragraph_view_builder */
+    $paragraph_view_builder = $this->entityTypeManager()->getViewBuilder('paragraph');
+
     /** @var \Drupal\node\Entity\Node $node */
     foreach ($nodes as $node) {
       if ($node->isPublished()) {
@@ -223,8 +228,8 @@ class StorageController extends ControllerBase {
           foreach ($pdcontent as $machine_name => $field_data) {
             $field_data = [];
             if (sizeof($paragraph->get($machine_name)->getValue()) > 0) {
-              $field_data["value"] = $paragraph->get($machine_name)
-                ->getValue()[0]["value"];
+              $field_render_array = $paragraph_view_builder->viewField($paragraph->get($machine_name), 'full');
+              $field_data["value"] = $renderer->render($field_render_array);
             }
 
             $field_config = \Drupal::entityTypeManager()
