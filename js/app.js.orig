@@ -307,7 +307,7 @@
             chart = chart + "<tr>";
             chart = chart + "<th>"+servicelist[0].field_data[field].label;
             help_text_counter++;
-            help =  servicehelp.field_data[field].value ? "<a class='popup' href='#help-"+help_text_counter+"'><span class='sr-only'>More information about "+servicelist[0].field_data[field].label+"</span><span class='fa fa-info-circle'></span></a><div class='help' id='help-"+help_text_counter+"'><h3>"+servicelist[0].field_data[field].label+"</h3>"+servicehelp.field_data[field].value+"</div>" : "";
+            help =  servicehelp.field_data[field].value ? "<a class='popup' href='#help-"+help_text_counter+"'><span class='sr-only'>More information about "+servicelist[0].field_data[field].label+"</span><span class='info-circle'></span></a><div class='help' id='help-"+help_text_counter+"'><h3>"+servicelist[0].field_data[field].label+"</h3>"+servicehelp.field_data[field].value+"</div>" : "";
             chart = chart + help;
             chart = chart +"</th>"; // row title
                 for (var j=0;j<servicelist.length;j++) {
@@ -617,7 +617,7 @@ function validateEmail(Email) {
         body = body + "\r\nUse this link to return to the tool with your criteria already selected: ";
         body = body + document.location.protocol+"//"+document.location.host+"/storage?facets="+facetlist
         body = body + "\r\n\r\n";
-        body = body + "If you have any further questions or need more information about " + 
+        body = body + "If you have any further questions or need more information about " +
             "services at Cornell, please contact  " +
             "user@example.com to set up a consultation, or contact the service owners " +
             "directly (contact details in tool comparison table).\r\n\r\n" +
@@ -641,7 +641,7 @@ function validateEmail(Email) {
             emailaddresses.push(email);
         }
         if ($("#emailtordmsg").prop("checked")) {
-            emailaddresses.push("user@example.com"); 
+            emailaddresses.push("user@example.com");
         }
         if (emailaddresses.length > 0) {
             var csrf_token;
