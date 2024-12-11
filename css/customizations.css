@@ -1,3 +1,14 @@
+.arrow-right {
+  background-color: black;
+  display: inline-block;
+  font-weight: normal;
+  height: 32px;
+  width: 32px;
+  margin-left: 4px;
+  mask-image: url(../images/cwd_utilities/arrow-right.svg);
+  vertical-align: middle;
+}
+
 .btn-primary {
     background-color: white;
     border-radius: 2px;
@@ -102,7 +113,7 @@
   }
 
   #comparisonchart thead th, #comparisonchart thead td, .floating-col-header > div {
-    white-space: nowrap;
+    white-space: break-spaces;
     background-color: #5A8128;
   }
 
@@ -139,7 +150,6 @@
 
   .services-header h3 {
     position: relative;
-    text-indent: 30px;
     margin-left: -3px !important;
   }
   @media (max-width: 768px) {
@@ -270,22 +280,25 @@
   #questionlist input[type="checkbox"] {
     margin-top: 3px;
   }
+
   #questionlist .control-indicator {
-    font-family: "FontAwesome";
-    text-decoration: none;
-    color: #757575;
-    font-weight: normal;
-  }
-  #questionlist .control-indicator::before {
-    content: '\f05a';
+    background-color: black;
     display: inline-block;
+    font-weight: normal;
+    height: 27px;
+    width: 27px;
+    margin-left: 4px;
+    mask-image: url(../images/cwd_utilities/info.svg);
+    vertical-align: middle;
   }
-  #questionlist .control-indicator:hover::before {
+
+  #questionlist .control-indicator:hover {
     color: #8d8d8d;
   }
-  #questionlist .control-indicator:active::before {
+  #questionlist .control-indicator:active {
     color: #5a5a5a;
   }
+
   #questionlist .explanation {
     color: #757575;
     font-weight: normal;
@@ -363,9 +376,9 @@
     z-index: -1;
     font-size: 2em;
   }
+
   #rdmsg-services .service-panel input ~ .control-indicator::before {
-    content: "\f10c";
-    font-family: "FontAwesome";
+    content: '';
     display: block;
     color: #7b5f83;
     font-weight: normal;
@@ -373,13 +386,18 @@
     position: absolute;
     top: 10px;
     right: 10px;
+    background-color: #7b5f83;
+    height: 24px;
+    width: 24px;
+    mask-image: url(../images/cwd_utilities/circle.svg);
   }
+
   #rdmsg-services .service-panel input:checked ~ .control-indicator {
     background-color: #c3b3c8;
   }
   #rdmsg-services .service-panel input:checked ~ .control-indicator::before {
-    content: "\f058";
-    color: #443448;
+    mask-image: url(../images/cwd_utilities/check.svg);
+    background-color: #443448;
   }
   #rdmsg-services .service-panel input:checked ~ h4, #rdmsg-services .service-panel input:checked ~ p {
     color: #513f57;
@@ -436,15 +454,19 @@
     left: -9999px;
   }
   .comparisonlist-wrapper input + .control-indicator::before {
-    content: "\f111";
-    font-family: "FontAwesome";
-    display: block;
     color: #c3b3c8;
-    margin-left: 0.25em;
+    content: '';
+    background-color: #c3b3c8;
+    display: block;
+    font-weight: normal;
+    height: 24px;
+    width: 24px;
+    margin-left: 4px;
+    mask-image: url(../images/cwd_utilities/filled-dot.svg);
+    vertical-align: middle;
   }
   .comparisonlist-wrapper input:checked + .control-indicator::before {
-    content: "\f058";
-    color: #95789d;
+    mask-image: url(../images/cwd_utilities/check.svg);
   }
   .comparisonlist-wrapper label {
     display: -webkit-box;
@@ -502,21 +524,22 @@
     float: right;
   }
 
-  .popup .fa.fa-info-circle {
-    font-family: "FontAwesome";
-    text-decoration: none;
-    color: #757575;
+  .popup .info-circle {
+    background-color: black;
+    display: inline-block;
     font-weight: normal;
-    font-size: 1.4em;
+    height: 27px;
+    width: 27px;
+    margin-left: 4px;
+    mask-image: url(../images/cwd_utilities/info.svg);
+    vertical-align: middle;
   }
-  .popup .fa.fa-info-circle::before {
-    content: '\f05a';
+
+  .popup .info-circle:hover {
+    background-color: #8d8d8d;
   }
-  .popup .fa.fa-info-circle:hover::before {
-    color: #8d8d8d;
-  }
-  .popup .fa.fa-info-circle:active::before {
-    color: #5a5a5a;
+  .popup .info-circle:active {
+    background-color: #5a5a5a;
   }
 
   .cd-row {
