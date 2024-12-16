@@ -290,7 +290,7 @@
             chart = chart + "<tr>";
             chart = chart + "<th scope='row'>"+servicelist[0].field_data[field].label;
             help_text_counter++;
-            help =  servicehelp.field_data[field].value ? "<a class='popup' aria-haspop='true' href='#help-"+help_text_counter+"'><span class='sr-only'>More information about "+servicelist[0].field_data[field].label+"</span><span class='fa fa-info-circle'></span></a><div class='help' id='help-"+help_text_counter+"'><h3>"+servicelist[0].field_data[field].label+"</h3>"+servicehelp.field_data[field].value+"</div>" : "";
+            help =  servicehelp.field_data[field].value ? "<a class='popup' aria-haspop='true' href='#help-"+help_text_counter+"'><span class='sr-only'>More information about "+servicelist[0].field_data[field].label+"</span><span class='info-circle'></span></a><div class='help' id='help-"+help_text_counter+"'><h3>"+servicelist[0].field_data[field].label+"</h3>"+servicehelp.field_data[field].value+"</div>" : "";
             chart = chart + help;
             chart = chart +"</th>"; // row title
                 for (var j=0;j<servicelist.length;j++) {
@@ -722,7 +722,7 @@ function validateEmail(Email) {
             //build scroll to see more notification
             $(".scrolling-outer").after('<div id="scroll-to-see-more" role="alert" aria-label="Scroll to see more" class="my-hidden" >'+
                                         '<ul class="notifications"><li><i class="material-icons">'+htmlTxt+
-                                        '</i><span class="fa fa-arrow-right"></span></li></ul></div>');
+                                        '</i><span class="arrow-right"></span></li></ul></div>');
 
         }
         $(".manualcheckbox").on("change", function(){
