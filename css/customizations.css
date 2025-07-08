@@ -241,7 +241,8 @@ h2.sub-heading.heading-services {
 
 #questionlist {
   font-size: 1em;
-  padding-left: 2em;
+  padding-left: 0;
+  list-style: none;
 }
 
 #questionlist li {
@@ -256,13 +257,13 @@ h2.sub-heading.heading-services {
   margin: 10px 0;
 }
 
-#questionlist .question-wrapper h4 {
+#questionlist .question-wrapper h3 {
   display: inline;
 }
 
-#questionlist h4 {
+#questionlist h3 {
   font-weight: bold;
-  font-size: 16px;
+  font-size: 18px;
   line-height: 1.2;
 }
 
@@ -281,8 +282,8 @@ h2.sub-heading.heading-services {
   background-color: black;
   display: inline-block;
   font-weight: normal;
-  height: 27px;
-  width: 27px;
+  height: 25px;
+  width: 25px;
   margin-left: 4px;
   mask-image: url(../images/cwd_utilities/info.svg);
   vertical-align: middle;

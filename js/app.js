@@ -62,7 +62,7 @@
         "{{#questions}}\
         <li>\
         <div class='question-wrapper'>\
-        <h4 id='question-{{id}}'>{{question}}</h4>\
+        <h3 id='question-{{id}}'>{{question}}</h3>\
         <a class='control-indicator collapsed'  role=\"button\" data-bs-toggle='collapse' aria-expanded='false' aria-controls='explanation-{{id}}' href='#explanation-{{id}}''>\
             <span class='sr-only'>Expand {{question}}</span>\
         </a>\
