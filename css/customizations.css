@@ -239,12 +239,13 @@ h2.sub-heading.heading-services {
   margin-bottom: 10px;
 }
 
-.questionlist {
+#questionlist {
   font-size: 1em;
-  padding-left: 2em;
+  padding-left: 0;
+  list-style: none;
 }
 
-.questionlist li {
+#questionlist li {
   color: #207d93;
   font-weight: bold;
   font-size: 1.4em;
@@ -252,82 +253,82 @@ h2.sub-heading.heading-services {
   margin-left: 2px;
 }
 
-.questionlist .question-wrapper {
+#questionlist .question-wrapper {
   margin: 10px 0;
 }
 
-.questionlist .question-wrapper h3 {
+#questionlist .question-wrapper h3 {
   display: inline;
 }
 
-.questionlist h3 {
+#questionlist h3 {
   font-weight: bold;
-  font-size: 16px;
+  font-size: 18px;
   line-height: 1.2;
 }
 
-.questionlist label {
+#questionlist label {
   font-family: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-weight: normal;
   font-size: 13px;
   color: #333;
 }
 
-.questionlist input[type="checkbox"] {
+#questionlist input[type="checkbox"] {
   margin-top: 3px;
 }
 
-.questionlist .control-indicator {
+#questionlist .control-indicator {
   background-color: black;
   display: inline-block;
   font-weight: normal;
-  height: 27px;
-  width: 27px;
+  height: 25px;
+  width: 25px;
   margin-left: 4px;
   mask-image: url(../images/cwd_utilities/info.svg);
   vertical-align: middle;
 }
 
-.questionlist .control-indicator:hover {
+#questionlist .control-indicator:hover {
   color: #8d8d8d;
 }
 
-.questionlist .control-indicator:active {
+#questionlist .control-indicator:active {
   color: #5a5a5a;
 }
 
-.questionlist .explanation {
+#questionlist .explanation {
   color: #757575;
   font-weight: normal;
   margin-bottom: 10px;
 }
 
-.questionlist .explanation,
-.questionlist .explanation p,
-.questionlist .explanation li {
+#questionlist .explanation,
+#questionlist .explanation p,
+#questionlist .explanation li {
   font-size: 13px;
 }
 
-.questionlist .explanation p,
-.questionlist .explanation li {
+#questionlist .explanation p,
+#questionlist .explanation li {
   margin-bottom: initial;
 }
 
-.questionlist .explanation .panel-title,
-.questionlist .explanation .panel-body {
+#questionlist .explanation .panel-title,
+#questionlist .explanation .panel-body {
   font-size: 12px;
   padding: 10px;
   margin: 0;
 }
 
-.questionlist .explanation .panel-heading {
+#questionlist .explanation .panel-heading {
   margin: 0;
   padding: 0;
   background-color: #95789d;
 }
 
-.questionlist .explanation .panel-heading,
-.questionlist .explanation .panel-primary {
+#questionlist .explanation .panel-heading,
+#questionlist .explanation .panel-primary {
   border-color: #5f4a65;
 }
 
