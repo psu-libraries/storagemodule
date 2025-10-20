@@ -3,7 +3,7 @@ description: Creates a page showing the Data Storage Advisor.
 package: Custom
 
 type: module
-core_version_requirement: ^9 || ^10
+core_version_requirement: ^10 || ^11
 libraries:
   - storage/storage
   - storage/vue.vuejs
