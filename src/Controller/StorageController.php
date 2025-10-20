@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\storage\Controller;
 
+use Drupal\Component\Serialization\Json;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
@@ -281,7 +282,7 @@ class StorageController extends ControllerBase {
     $json_string = \Drupal::request()->getContent();
     //  \Drupal::logger('storage')->notice("email json is $json_string");
 
-    $decoded = \Drupal\Component\Serialization\Json::decode($json_string);
+    $decoded = Json::decode($json_string);
 
     // get $qdata from $decoded
     $qdata = $decoded["qdata"];
