@@ -30,7 +30,6 @@
     "license": "GPL-2.0-or-later",
     "minimum-stability": "dev",
     "require": {
-        "drupal/paragraphs": "^1.16",
-        "drupal/smtp": "^1.4"
+        "drupal/paragraphs": "^1.16"
     }
 }
